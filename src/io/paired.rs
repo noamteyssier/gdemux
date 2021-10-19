@@ -25,13 +25,16 @@ impl Pair {
         self.r2.seq()
     }
 
+    pub fn trim_adapter(&mut self, adapter: &str) {
+        self.r2.assign_seq(&self.r2_seq().replace(adapter, ""));
+    }
 }
 
-pub struct PairReader <F> {
+pub struct PairReader<F>{
     r1 : Records<F>,
     r2 : Records<F>
 }
-impl <F> PairReader <F>
+impl<F> PairReader<F>
 where
     F: FastqRead
 {
