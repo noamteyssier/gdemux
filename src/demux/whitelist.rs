@@ -28,7 +28,12 @@ impl Whitelist {
             }
             else {
                 if line.len() == size {
-                    list.insert(line.to_string());
+                    if list.contains(line) {
+                        panic!("Duplicate sequence found");
+                    }
+                    else {
+                        list.insert(line.to_string());
+                    }
                 }
                 else {
                     panic!("Irregular sizes in whitelist");
@@ -64,7 +69,12 @@ impl Whitelist {
             }
             else {
                 if line.len() == size {
-                    list.insert(line.to_string());
+                    if list.contains(line) {
+                        panic!("Duplicate sequence found");
+                    }
+                    else {
+                        list.insert(line.to_string());
+                    }
                 }
                 else {
                     panic!("Irregular sizes in whitelist");
@@ -102,8 +112,13 @@ impl Whitelist {
             }
             else {
                 if size == seq.len() {
-                    list.insert(seq.to_string());
-                    mapping.insert(seq.to_string(), name.to_string());
+                    if list.contains(seq) {
+                        panic!("Duplicate sequence found");
+                    }
+                    else{
+                        list.insert(seq.to_string());
+                        mapping.insert(seq.to_string(), name.to_string());
+                    }
                 }
                 else {
                     panic!("Irregular sizes in whitelist");
@@ -136,7 +151,7 @@ impl Whitelist {
         }
     }
 
-    pub fn pprint(&self) {
+    pub fn pretty_print(&self) {
         for (key, value) in &self.counts {
             match self.mapping.is_some() {
                 true => {

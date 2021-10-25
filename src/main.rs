@@ -15,6 +15,7 @@ fn main() {
 
     println!("{}", "Loading Barcodes");
     let barcode_whitelist = Whitelist::from_gzip_file(barcode_filename);
+
     println!("{}", "Loading Guides");
     let mut guide_whitelist = Whitelist::from_table(table_filename, '\t');
 
@@ -35,9 +36,8 @@ fn main() {
         // Trim Adapter sequence
         .map(|mut x| {filt_adapt.strip_adapter(&mut x); x})
 
-        // Print pairs
-        //.for_each(|x| println!("{}", x.r2_seq()));
+        // Increment Guide Counts 
         .for_each(|x| guide_whitelist.increment_counts(x.r2_seq()));
 
-    guide_whitelist.pprint();
+    guide_whitelist.pretty_print();
 }
