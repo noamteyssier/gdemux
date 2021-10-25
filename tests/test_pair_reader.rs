@@ -1,8 +1,8 @@
 use bio::io::Records;
 use gdemux::io::PairReader;
 
-static FN1: &str = "data/test_R1.fastq.gz";
-static FN2: &str = "data/test_R2.fastq.gz";
+static FN1: &str = "tests/data/test_R1.fq.gz";
+static FN2: &str = "tests/data/test_R2.fq.gz";
 
 #[test]
 fn test_pair_reader_from_gzip(){
