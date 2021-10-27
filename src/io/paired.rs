@@ -7,14 +7,8 @@ pub struct Pair {
     r2: FastqRecord
 }
 impl Pair {
-    pub fn new(
-        r1: Result<FastqRecord, Error>, 
-        r2: Result<FastqRecord, Error>) -> Self 
-    {
-        Self{
-            r1: r1.expect("Error: Malformed R1 Record"), 
-            r2: r2.expect("Error: Malformed R2 Record")
-        }
+    pub fn new(r1: FastqRecord, r2: FastqRecord) -> Self {
+        Self{ r1, r2 }
     }
 
     pub fn r1_seq(&self) -> &str {
@@ -70,8 +64,8 @@ where
         let r2_rec = self.r2.next();
         if r1_rec.is_some() & r2_rec.is_some() {
             let pair = Pair::new(
-                r1_rec.unwrap(),
-                r2_rec.unwrap()
+                r1_rec.unwrap().expect("Malformed R1"),
+                r2_rec.unwrap().expect("Malformed R2")
                 );
             Some(Ok(pair))
         }

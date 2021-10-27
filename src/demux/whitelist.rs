@@ -140,6 +140,27 @@ impl Whitelist {
         self.list.contains(&seq[0..self.size])
     }
 
+    /// Checks if provided sequence is within the whitelist
+    /// and returns the alias to that sequence if it is present
+    /// otherwise will return the sequence
+    pub fn match_sequence(&self, seq:&str) -> Option<String> {
+        if self.size > seq.len() {
+            None
+        }
+        else {
+            let trunc = &seq[0..self.size];
+            if self.list.contains(trunc) {
+                match self.mapping {
+                    Some(ref m) => Some(m.get(trunc).expect("Error").to_string()),
+                    None => Some(trunc.to_string())
+                }
+            }
+            else {
+                None
+            }
+        }
+    }
+
     pub fn size(&self) -> usize {
         self.size
     }
