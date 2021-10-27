@@ -1,53 +1,9 @@
 mod io;
 mod demux;
+mod utils;
 use demux::{FiltAdapt, Whitelist, BUS, Demux};
 use io::PairReader;
-use clap::{Arg, App};
-
-fn get_args() -> App<'static, 'static> {
-    App::new("gDemux")
-        .version("0.1")
-        .author("Noam Teyssier <Noam.Teyssier@ucsf.edu>")
-        .about("Parses a pair of Raw FASTQ files and calculates the number of UMIs that belong to each barcode-guide interaction")
-        .arg(Arg::with_name("INPUT_R1")
-            .short("i")
-            .long("r1")
-            .help("Sets the input R1 fastq file to use (*.fastq, *.fq, *.fastq.gz, *.fq.gz)")
-            .required(true)
-            .min_values(1))
-        .arg(Arg::with_name("INPUT_R2")
-            .short("I")
-            .long("r2")
-            .help("Sets the input R2 fastq file to use (*.fastq, *.fq, *.fastq.gz, *.fq.gz)")
-            .required(true)
-            .min_values(1))
-        .arg(Arg::with_name("barcode_whitelist")
-            .short("c")
-            .long("barcode_whitelist")
-            .help("Sets the input barcode whitelist to screen R1 against")
-            .required(true)
-            .min_values(1))
-        .arg(Arg::with_name("guide_whitelist")
-            .short("g")
-            .long("guide_whitelist")
-            .help("Sets the input guide whitelist to map R2 against (can be .txt, .tsv)")
-            .required(true)
-            .min_values(1))
-        .arg(Arg::with_name("SIZE_UMI")
-                .short("u")
-                .long("umi_size")
-                .help("Sets the size of the UMI to use (default=12)")
-                .required(false)
-                .takes_value(true)
-                .default_value("12"))
-        .arg(Arg::with_name("ADAPTER")
-            .short("a")
-            .long("adapter")
-            .help("Sets the adapter sequence to match R2 with")
-            .required(false)
-            .takes_value(true)
-            .default_value("AGTATCCCTTGGAGAACCACCTTG"))
-}
+use utils::{get_args, load_barcodes, load_guides};
 
 /// This is a library to perform Barcode-UMI-Sequence (BUS) Demultiplexing against two whitelists.
 /// Guide will be used interchangeably with sequence (BUG == BUS)
@@ -86,8 +42,10 @@ fn main() {
             .parse::<usize>()
             .expect("Error: Unable to parse given UMI size to int");
 
-    let barcode_whitelist = Whitelist::from_gzip_file(barcode_filename);
-    let guide_whitelist = Whitelist::from_table(table_filename, '\t');
+    let barcode_whitelist = load_barcodes(barcode_filename)
+        .expect("Error: Unable to load barcode whitelist");
+    let guide_whitelist = load_guides(table_filename).
+        expect("Error: Unable to load guide whitelist/map");
 
     let b_size = barcode_whitelist.size();
     let s_size = guide_whitelist.size();
