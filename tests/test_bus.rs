@@ -10,7 +10,7 @@ fn build_const_bus_a() -> BUS {
 
     let p = Pair::new(fq1, fq2);
     
-    let mut bus = BUS::from_pair(p, 4, 4, 8);
+    let mut bus = BUS::from_pair(p, 4, 4, 8).unwrap();
     bus.assign("class_a");
     bus
 }
@@ -27,7 +27,7 @@ fn build_const_bus_b() -> BUS {
 
     let p = Pair::new(fq1, fq2);
 
-    let mut bus = BUS::from_pair(p, 4, 4, 8);
+    let mut bus = BUS::from_pair(p, 4, 4, 8).unwrap();
     bus.assign("class_b");
     bus
 }
@@ -44,7 +44,7 @@ fn build_const_bus_c() -> BUS {
 
     let p = Pair::new(fq1, fq2);
     
-    let mut bus = BUS::from_pair(p, 4, 4, 8);
+    let mut bus = BUS::from_pair(p, 4, 4, 8).unwrap();
     bus.assign("class_a");
     bus
 }
@@ -61,7 +61,7 @@ fn build_const_bus_d() -> BUS {
 
     let p = Pair::new(fq1, fq2);
     
-    let mut bus = BUS::from_pair(p, 4, 4, 8);
+    let mut bus = BUS::from_pair(p, 4, 4, 8).unwrap();
     bus.assign("class_b");
     bus
 }
@@ -78,7 +78,7 @@ fn build_const_bus_e() -> BUS {
 
     let p = Pair::new(fq1, fq2);
     
-    let mut bus = BUS::from_pair(p, 4, 4, 8);
+    let mut bus = BUS::from_pair(p, 4, 4, 8).unwrap();
     bus.assign("class_a");
     bus
 }

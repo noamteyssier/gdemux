@@ -13,7 +13,7 @@ fn build_const_bus_a() -> BUS {
 
     let p = Pair::new(fq1, fq2);
     
-    let mut bus = BUS::from_pair(p, 4, 4, 8);
+    let mut bus = BUS::from_pair(p, 4, 4, 8).unwrap();
     bus.assign("class_a");
     bus
 }

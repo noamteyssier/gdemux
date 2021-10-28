@@ -10,18 +10,21 @@ static WL5: &str = "tests/data/test_whitelist_duplicate_seq.txt";
 fn whitelist_tab(){
     let wl = Whitelist::from_table(WL1, '\t');
     assert_eq!(wl.size(), 33);
+    assert_eq!(wl.members(), 4)
 }
 
 #[test]
 fn whitelist_gzip(){
     let wl = Whitelist::from_gzip_file(WL2);
     assert_eq!(wl.size(), 16);
+    assert_eq!(wl.members(), 4)
 }
 
 #[test]
 fn whitelist_txt(){
     let wl = Whitelist::from_file(WL3);
     assert_eq!(wl.size(), 16);
+    assert_eq!(wl.members(), 4)
 }
 
 #[test]
