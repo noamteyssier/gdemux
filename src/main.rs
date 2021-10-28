@@ -1,7 +1,10 @@
 mod io;
 mod demux;
 mod utils;
-use demux::{FiltAdapt, Whitelist, BUS, Demux};
+use std::time::Instant;
+use indicatif::ProgressBar;
+
+use demux::{FiltAdapt, BUS, Demux};
 use io::PairReader;
 use utils::{get_args, load_barcodes, load_guides};
 
@@ -54,10 +57,25 @@ fn main() {
     let filt_adapt = FiltAdapt::new(adapter.to_string());
     let mut demux = Demux::new();
 
+    let pbr = ProgressBar::new_spinner();
+    pbr.enable_steady_tick(100);
+    let start_time = Instant::now();
+    let mut num_total = 0;
+
     pairs.into_iter()
         
         // Read Pairs
-        .map(|x| x.expect("Error reading pairs"))
+        .map(|x| {
+            num_total += 1;
+            if num_total % 10000 == 0 {
+                pbr.set_message(&format!(
+                    "Processing... {} records // {:.2} sec elapsed", 
+                    num_total, 
+                    start_time.elapsed().as_secs_f32()
+                    ));
+            }
+            x.expect("Error reading pairs")
+        })
         
         // Filter for R2 beginning with adapter
         .filter(|x| filt_adapt.contains_adapter(&x))
@@ -84,6 +102,13 @@ fn main() {
 
         // Insert BUS to growing counts
         .for_each(|x| demux.insert_bus(x));
+        
+    pbr.set_message(&format!(
+        "Processing... {} records // {:.2} sec elapsed",
+        num_total,
+        start_time.elapsed().as_secs_f32()
+        ));
+    pbr.finish();
 
 
     demux.pretty_print();

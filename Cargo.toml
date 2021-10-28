@@ -9,4 +9,5 @@ edition = "2018"
 [dependencies]
 flate2 = "1.0"
 clap = "2" 
+indicatif = "0.13"
 bio = { path = "../bio" }
