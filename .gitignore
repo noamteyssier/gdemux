@@ -1,2 +1,8 @@
 /target
 /data/*
+*.ipynb
+.ipynb*
+*.py
+*.tab
+*.png
+
