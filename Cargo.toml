@@ -10,4 +10,4 @@ edition = "2018"
 flate2 = "1.0"
 clap = "2" 
 indicatif = "0.13"
-bio = { path = "../bio" }
+bio = { git = "https://github.com/noamteyssier/bio", branch = "main" }

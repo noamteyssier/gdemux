@@ -35,6 +35,7 @@ checksum = "cdb031dd78e28731d87d56cc8ffef4a8f36ca26c38fe2de700543e627f8a464a"
 [[package]]
 name = "bio"
 version = "0.1.0"
+source = "git+https://github.com/noamteyssier/bio?branch=main#ae832accaf88497559aea08fbde85d302c9db999"
 dependencies = [
  "flate2",
 ]
