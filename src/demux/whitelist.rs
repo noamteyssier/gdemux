@@ -7,6 +7,7 @@ pub struct Whitelist {
     list: HashSet<String>,
     mapping: Option<HashMap<String, String>>,
     size: usize,
+    members: usize,
     counts: HashMap<String, usize>
 }
 impl Whitelist {
@@ -19,6 +20,7 @@ impl Whitelist {
         let mut list = HashSet::new();
 
         let mut size = 0;
+        let mut members = 0;
         loop {
             line.clear();
             if bufr.read_line(&mut line).expect("Error Reading") == 0 {break;}
@@ -26,26 +28,25 @@ impl Whitelist {
             if size == 0 {
                 size = line.len();
             }
-            else {
-                if line.len() == size {
-                    if list.contains(line) {
-                        panic!("Duplicate sequence found");
-                    }
-                    else {
-                        list.insert(line.to_string());
-                    }
+            if line.len() == size {
+                if list.contains(line) {
+                    panic!("Duplicate sequence found");
                 }
                 else {
-                    panic!("Irregular sizes in whitelist");
+                    members += 1;
+                    list.insert(line.to_string());
                 }
             }
-            list.insert(line.to_string());
+            else {
+                panic!("Irregular sizes in whitelist");
+            }
         }
 
         Self {
             list,
             mapping: None,
             size,
+            members,
             counts: HashMap::new()
         }
     }
@@ -59,6 +60,7 @@ impl Whitelist {
         let mut line = String::new();
         let mut list = HashSet::new();
         let mut size = 0;
+        let mut members = 0;
 
         loop {
             line.clear();
@@ -67,26 +69,25 @@ impl Whitelist {
             if size == 0 {
                 size = line.len();
             }
-            else {
-                if line.len() == size {
-                    if list.contains(line) {
-                        panic!("Duplicate sequence found");
-                    }
-                    else {
-                        list.insert(line.to_string());
-                    }
+            if line.len() == size {
+                if list.contains(line) {
+                    panic!("Duplicate sequence found");
                 }
                 else {
-                    panic!("Irregular sizes in whitelist");
+                    members += 1;
+                    list.insert(line.to_string());
                 }
             }
-            list.insert(line.to_string());
+            else {
+                panic!("Irregular sizes in whitelist");
+            }
         }
 
         Self {
             list,
             mapping: None,
             size,
+            members,
             counts: HashMap::new()
         }
     }
@@ -100,6 +101,7 @@ impl Whitelist {
         let mut list = HashSet::new();
         let mut mapping = HashMap::new();
         let mut size = 0;
+        let mut members = 0;
 
         loop {
             line.clear();
@@ -110,27 +112,26 @@ impl Whitelist {
             if size == 0 {
                 size = seq.len();
             }
-            else {
-                if size == seq.len() {
-                    if list.contains(seq) {
-                        panic!("Duplicate sequence found");
-                    }
-                    else{
-                        list.insert(seq.to_string());
-                        mapping.insert(seq.to_string(), name.to_string());
-                    }
+            if size == seq.len() {
+                if list.contains(seq) {
+                    panic!("Duplicate sequence found");
                 }
-                else {
-                    panic!("Irregular sizes in whitelist");
+                else{
+                    members += 1;
+                    list.insert(seq.to_string());
+                    mapping.insert(seq.to_string(), name.to_string());
                 }
             }
-
+            else {
+                panic!("Irregular sizes in whitelist");
+            }
         }
 
         Self {
             list,
             mapping: Some(mapping),
             size,
+            members,
             counts: HashMap::new()
         }
     }
@@ -163,6 +164,10 @@ impl Whitelist {
 
     pub fn size(&self) -> usize {
         self.size
+    }
+
+    pub fn members(&self) -> usize {
+        self.members
     }
 
     pub fn increment_counts(&mut self, s: &str) {
