@@ -22,7 +22,7 @@ gdemux\
 ## Barcodes
 The whitelist barcodes are expected to be a plain text formatted file where each line is a specific barcode that is expected to be in the dataset. An example of this whitelist is the 10xv3 or 10xv2 lists. These can be provided as an argument to gdemux as either plaintext or in a gzip compressed format. 
 
-The 10Xv3 whitelist can be found here: https://github.com/10XGenomics/cellranger/blob/a83c753ce641db6409a59ad817328354fbe7187e/lib/python/cellranger/barcodes/translation/3M-february-2018.txt.gz
+The [10Xv3 whitelist](https://github.com/10XGenomics/cellranger/blob/a83c753ce641db6409a59ad817328354fbe7187e/lib/python/cellranger/barcodes/translation/3M-february-2018.txt.gz) can be found here: 
 
 There can not be duplicates in this whitelist, and the program will quit if it finds one. 
 
